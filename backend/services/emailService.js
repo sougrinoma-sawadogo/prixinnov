@@ -31,7 +31,7 @@ const formatDate = (dateValue, options = {}) => {
     // Fallback to current date if no date provided
     dateValue = new Date();
   }
-  
+
   try {
     const date = new Date(dateValue);
     if (isNaN(date.getTime())) {
@@ -79,9 +79,9 @@ export const sendCandidatureConfirmation = async (candidature, recipientEmail) =
 
     // Email to candidate
     const candidateEmailContent = {
-      from: `"Prix de l'Innovation MEF" <${senderEmail}>`,
+      from: `"PRINNOV/MEF 2026" <${senderEmail}>`,
       to: recipientEmail,
-      subject: 'Confirmation de réception de votre candidature - Prix de l\'Innovation MEF',
+      subject: 'Confirmation de réception de votre candidature - PRINNOV/MEF 2026',
       html: `
         <!DOCTYPE html>
         <html>
@@ -96,16 +96,17 @@ export const sendCandidatureConfirmation = async (candidature, recipientEmail) =
             .button { display: inline-block; padding: 12px 24px; background-color: #009639; color: white; text-decoration: none; border-radius: 4px; margin: 10px 0; }
             .button:hover { background-color: #007a2e; }
             .footer { text-align: center; padding: 20px; color: #6b7280; font-size: 12px; }
+            .mail-detail-content .button {display: inline-block; padding: 12px 24px; background-color: rgb(0, 150, 57); color: white; text-decoration: none; border-radius: 4px; margin: 10px 0px; }
           </style>
         </head>
-        <body>
+        <body class="mail-detail-content">
           <div class="container">
             <div class="header">
-              <h1>Prix de l'Innovation MEF</h1>
+              <h1>PRINNOV/MEF 2026</h1>
             </div>
             <div class="content">
               <p>Bonjour,</p>
-              <p>Nous avons bien reçu votre candidature pour le <strong>Prix de l'Innovation MEF</strong>.</p>
+              <p>Nous avons bien reçu votre candidature pour le <strong>PRINNOV/MEF 2026</strong>.</p>
               
               <div class="info-box">
                 <h3>Détails de votre candidature :</h3>
@@ -124,7 +125,7 @@ export const sendCandidatureConfirmation = async (candidature, recipientEmail) =
               
               <p>Cordialement,<br>
               <strong>Secrétariat Technique<br>
-              Prix de l'Innovation MEF<br>
+              PRINNOV/MEF 2026<br>
               Ministère de l'Économie et des Finances - Burkina Faso</strong></p>
             </div>
             <div class="footer">
@@ -135,11 +136,11 @@ export const sendCandidatureConfirmation = async (candidature, recipientEmail) =
         </html>
       `,
       text: `
-        Prix de l'Innovation MEF - Confirmation de réception
+        PRINNOV/MEF 2026 - Confirmation de réception
         
         Bonjour,
         
-        Nous avons bien reçu votre candidature pour le Prix de l'Innovation MEF.
+        Nous avons bien reçu votre candidature pour le PRINNOV/MEF 2026.
         
         Détails de votre candidature :
         - Structure : ${structure?.denomination || 'N/A'}
@@ -151,13 +152,13 @@ export const sendCandidatureConfirmation = async (candidature, recipientEmail) =
         Vous serez informé(e) de l'avancement de votre dossier par email.
         
         Cordialement,
-        Secrétariat Technique - Prix de l'Innovation MEF
+        Secrétariat Technique - PRINNOV/MEF 2026
       `,
     };
 
     // Email to admin
     const adminEmailContent = {
-      from: `"Prix de l'Innovation MEF" <${senderEmail}>`,
+      from: `"PRINNOV/MEF 2026" <${senderEmail}>`,
       to: adminEmail,
       subject: `Nouvelle candidature reçue - #${candidature.id}`,
       html: `
@@ -179,7 +180,7 @@ export const sendCandidatureConfirmation = async (candidature, recipientEmail) =
               <h1>Nouvelle Candidature Reçue</h1>
             </div>
             <div class="content">
-              <p>Une nouvelle candidature a été soumise pour le Prix de l'Innovation MEF.</p>
+              <p>Une nouvelle candidature a été soumise pour le PRINNOV/MEF 2026.</p>
               
               <div class="info-box">
                 <h3>Détails de la candidature :</h3>
@@ -217,6 +218,110 @@ export const sendCandidatureConfirmation = async (candidature, recipientEmail) =
     };
   } catch (error) {
     console.error('Error sending candidature confirmation email:', error);
+    throw error;
+  }
+};
+
+/**
+ * Send admission email when candidature is accepted
+ * @param {Object} candidature - The candidature object with structure info
+ * @param {string} recipientEmail - Email address of the recipient
+ */
+export const sendAdmissionEmail = async (candidature, recipientEmail) => {
+  try {
+    const structure = candidature.structure;
+    const senderEmail = process.env.MAIL_SENDER || process.env.EMAIL_FROM || 'maarchdgd@benit.biz';
+
+    const admissionEmailContent = {
+      from: `"PRINNOV/MEF 2026" <${senderEmail}>`,
+      to: recipientEmail,
+      subject: 'Félicitations ! Votre candidature a été admise - PRINNOV/MEF 2026',
+      html: `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="utf-8">
+          <style>
+            body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+            .header { background: linear-gradient(135deg, #009639 0%, #007a2e 100%); color: white; padding: 20px; text-align: center; }
+            .content { padding: 20px; background-color: #f9fafb; }
+            .success-box { background-color: #d1fae5; border: 2px solid #10b981; padding: 20px; margin: 20px 0; border-radius: 8px; }
+            .info-box { background-color: white; padding: 15px; margin: 15px 0; border-left: 4px solid #009639; }
+            .button { display: inline-block; padding: 12px 24px; background-color: #009639; color: white; text-decoration: none; border-radius: 4px; margin: 10px 0; }
+            .footer { text-align: center; padding: 20px; color: #6b7280; font-size: 12px; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h1>🎉 Félicitations !</h1>
+            </div>
+            <div class="content">
+              <div class="success-box">
+                <h2 style="color: #059669; margin-top: 0;">Votre candidature a été admise !</h2>
+                <p style="font-size: 16px; margin-bottom: 0;">
+                  Nous avons le plaisir de vous informer que votre candidature pour le <strong>PRINNOV/MEF 2026</strong> a été <strong>admise</strong> par le comité d'évaluation.
+                </p>
+              </div>
+
+              <p>Bonjour,</p>
+              
+              <p>Après examen de votre dossier, le comité d'évaluation a pris la décision d'<strong>admettre</strong> votre candidature.</p>
+              
+              <div class="info-box">
+                <h3>Détails de votre candidature :</h3>
+                <p><strong>Structure :</strong> ${structure?.denomination || 'N/A'}</p>
+                <p><strong>Catégorie :</strong> ${candidature.categorie_prix || 'N/A'}</p>
+                <p><strong>Date de soumission :</strong> ${formatDate(candidature.created_at)}</p>
+                <p><strong>Numéro de candidature :</strong> #${candidature.id}</p>
+              </div>
+
+              <p>Vous serez contacté(e) prochainement par le secrétariat technique pour les prochaines étapes.</p>
+              
+              <div style="text-align: center; margin: 20px 0;">
+                <a href="${process.env.FRONTEND_URL || 'https://prinnov.benit.biz'}/candidature/statut/${candidature.id}" class="button">Voir le statut de ma candidature</a>
+              </div>
+              
+              <p>Cordialement,<br>
+              <strong>Secrétariat Technique<br>
+              PRINNOV/MEF 2026<br>
+              Ministère de l'Économie et des Finances - Burkina Faso</strong></p>
+            </div>
+            <div class="footer">
+              <p>Cet email a été envoyé automatiquement, merci de ne pas y répondre.</p>
+            </div>
+          </div>
+        </body>
+        </html>
+      `,
+      text: `
+        PRINNOV/MEF 2026 - Candidature Admise
+        
+        Félicitations !
+        
+        Votre candidature a été admise !
+        
+        Nous avons le plaisir de vous informer que votre candidature pour le PRINNOV/MEF 2026 a été admise par le comité d'évaluation.
+        
+        Détails de votre candidature :
+        - Structure : ${structure?.denomination || 'N/A'}
+        - Catégorie : ${candidature.categorie_prix || 'N/A'}
+        - Date de soumission : ${formatDate(candidature.created_at, { hour: undefined, minute: undefined })}
+        - Numéro de candidature : #${candidature.id}
+        
+        Vous serez contacté(e) prochainement par le secrétariat technique pour les prochaines étapes.
+        
+        Cordialement,
+        Secrétariat Technique - PRINNOV/MEF 2026
+      `,
+    };
+
+    const result = await transporter.sendMail(admissionEmailContent);
+    console.log('✅ Admission email sent to:', recipientEmail);
+    return { sent: true, messageId: result.messageId };
+  } catch (error) {
+    console.error('Error sending admission email:', error);
     throw error;
   }
 };

@@ -1,4 +1,5 @@
 import { Evaluation, Candidature, Utilisateur } from '../models/index.js';
+import { sendAdmissionEmail } from '../services/emailService.js';
 
 export const getEvaluations = async (req, res) => {
   try {
@@ -157,7 +158,15 @@ export const updateStatut = async (req, res) => {
       });
     }
 
-    const evaluation = await Evaluation.findByPk(id);
+    const evaluation = await Evaluation.findByPk(id, {
+      include: [
+        {
+          model: Candidature,
+          as: 'candidature',
+          include: [{ model: (await import('../models/index.js')).Structure, as: 'structure' }],
+        },
+      ],
+    });
 
     if (!evaluation) {
       return res.status(404).json({
@@ -166,15 +175,37 @@ export const updateStatut = async (req, res) => {
       });
     }
 
+    const previousStatut = evaluation.statut;
+
     await evaluation.update({
       statut,
       evaluateur_id: req.user.id,
       date_evaluation: new Date(),
     });
 
+    // Send admission email if status changed to "admis"
+    if (statut === 'admis' && previousStatut !== 'admis') {
+      try {
+        const candidature = evaluation.candidature;
+        const structure = candidature.structure;
+        
+        if (structure && structure.email) {
+          await sendAdmissionEmail(candidature, structure.email);
+          console.log(`✅ Admission email sent to ${structure.email} for candidature #${candidature.id}`);
+        } else {
+          console.warn(`⚠️  Cannot send admission email: structure email not found for candidature #${candidature.id}`);
+        }
+      } catch (emailError) {
+        console.error('Error sending admission email:', emailError);
+        // Don't fail the request if email fails, but log it
+      }
+    }
+
     res.json({
       success: true,
-      message: 'Statut mis à jour avec succès',
+      message: statut === 'admis' && previousStatut !== 'admis' 
+        ? 'Statut mis à jour avec succès. Un email de confirmation a été envoyé au candidat.'
+        : 'Statut mis à jour avec succès',
       data: evaluation,
     });
   } catch (error) {
