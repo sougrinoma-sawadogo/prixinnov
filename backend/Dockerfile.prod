@@ -31,10 +31,24 @@ RUN mkdir -p uploads
 
 # Create non-root user
 RUN addgroup -g 1001 -S nodejs && \
-    adduser -S nodejs -u 1001 && \
-    chown -R nodejs:nodejs /app
+    adduser -S nodejs -u 1001
 
-USER nodejs
+# Install gosu for user switching
+RUN apk add --no-cache gosu
+
+# Create entrypoint script to fix permissions and switch to nodejs user
+# This runs as root, fixes permissions, then switches to nodejs user
+RUN echo '#!/bin/sh' > /entrypoint.sh && \
+    echo 'set -e' >> /entrypoint.sh && \
+    echo 'echo "Fixing uploads directory permissions..."' >> /entrypoint.sh && \
+    echo 'chown -R nodejs:nodejs /app/uploads 2>/dev/null || true' >> /entrypoint.sh && \
+    echo 'chmod -R 755 /app/uploads 2>/dev/null || true' >> /entrypoint.sh && \
+    echo 'echo "Switching to nodejs user and starting application..."' >> /entrypoint.sh && \
+    echo 'exec gosu nodejs "$@"' >> /entrypoint.sh && \
+    chmod +x /entrypoint.sh
+
+# Don't set USER here - entrypoint will handle user switching
+ENTRYPOINT ["/entrypoint.sh"]
 
 # Expose port
 EXPOSE 3000
