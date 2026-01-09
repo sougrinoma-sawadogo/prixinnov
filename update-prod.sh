@@ -17,8 +17,18 @@ fi
 echo "✅ Code mis à jour"
 echo ""
 
-# 2. Reconstruire les images Docker
-echo "2️⃣ Reconstruction des images Docker..."
+# 2. Nettoyer les conteneurs corrompus (si nécessaire)
+echo "2️⃣ Nettoyage des conteneurs corrompus..."
+docker-compose -f docker-compose.prod.yml --env-file .env.prod down 2>/dev/null || true
+docker ps -aq --filter "name=prixddi" | xargs -r docker rm -f 2>/dev/null || true
+docker network rm prixddi_network 2>/dev/null || true
+docker container prune -f > /dev/null 2>&1
+docker network prune -f > /dev/null 2>&1
+echo "✅ Nettoyage terminé"
+echo ""
+
+# 3. Reconstruire les images Docker
+echo "3️⃣ Reconstruction des images Docker..."
 docker-compose -f docker-compose.prod.yml --env-file .env.prod build --no-cache backend frontend
 
 if [ $? -ne 0 ]; then
@@ -29,8 +39,8 @@ fi
 echo "✅ Images reconstruites"
 echo ""
 
-# 3. Redémarrer les services
-echo "3️⃣ Redémarrage des services..."
+# 4. Redémarrer les services
+echo "4️⃣ Redémarrage des services..."
 docker-compose -f docker-compose.prod.yml --env-file .env.prod up -d
 
 if [ $? -ne 0 ]; then
@@ -41,16 +51,16 @@ fi
 echo "✅ Services redémarrés"
 echo ""
 
-# 4. Attendre que les services soient prêts
-echo "4️⃣ Attente du démarrage des services..."
+# 5. Attendre que les services soient prêts
+echo "5️⃣ Attente du démarrage des services..."
 sleep 10
 
-# 5. Vérifier le statut
-echo "5️⃣ Vérification du statut..."
+# 6. Vérifier le statut
+echo "6️⃣ Vérification du statut..."
 docker-compose -f docker-compose.prod.yml --env-file .env.prod ps
 
 echo ""
-echo "6️⃣ Vérification de la santé du backend..."
+echo "7️⃣ Vérification de la santé du backend..."
 sleep 5
 
 if curl -f -s http://localhost/api/health > /dev/null 2>&1; then
