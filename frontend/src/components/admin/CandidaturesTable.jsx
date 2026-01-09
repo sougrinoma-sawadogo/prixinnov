@@ -12,6 +12,21 @@ const CandidaturesTable = ({ candidatures, onView, pagination, onPageChange }) =
     );
   };
 
+  const formatDate = (dateString) => {
+    if (!dateString) return 'N/A';
+    try {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) return 'N/A';
+      return date.toLocaleDateString('fr-FR', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+      });
+    } catch (error) {
+      return 'N/A';
+    }
+  };
+
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden">
       <div className="overflow-x-auto">
@@ -20,6 +35,8 @@ const CandidaturesTable = ({ candidatures, onView, pagination, onPageChange }) =
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Structure</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Téléphone</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Catégorie</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Statut</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
@@ -29,7 +46,7 @@ const CandidaturesTable = ({ candidatures, onView, pagination, onPageChange }) =
           <tbody className="bg-white divide-y divide-gray-200">
             {candidatures.length === 0 ? (
               <tr>
-                <td colSpan={6} className="px-6 py-12 text-center text-gray-500">
+                <td colSpan={8} className="px-6 py-12 text-center text-gray-500">
                   Aucune candidature trouvée
                 </td>
               </tr>
@@ -41,18 +58,44 @@ const CandidaturesTable = ({ candidatures, onView, pagination, onPageChange }) =
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-medium text-gray-900">
-                      {candidature.structure?.denomination}
+                      {candidature.structure?.denomination || 'N/A'}
                     </div>
-                    <div className="text-sm text-gray-500">{candidature.structure?.sigle}</div>
+                    <div className="text-sm text-gray-500">{candidature.structure?.sigle || ''}</div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                    <a 
+                      href={`mailto:${candidature.structure?.email || ''}`}
+                      className="text-indigo-600 hover:text-indigo-800 hover:underline"
+                      onClick={(e) => {
+                        if (!candidature.structure?.email) {
+                          e.preventDefault();
+                        }
+                      }}
+                    >
+                      {candidature.structure?.email || 'N/A'}
+                    </a>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                    <a 
+                      href={`tel:${candidature.structure?.contact_responsable || ''}`}
+                      className="text-indigo-600 hover:text-indigo-800 hover:underline"
+                      onClick={(e) => {
+                        if (!candidature.structure?.contact_responsable) {
+                          e.preventDefault();
+                        }
+                      }}
+                    >
+                      {candidature.structure?.contact_responsable || 'N/A'}
+                    </a>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {candidature.categorie_prix}
+                    {candidature.categorie_prix || 'N/A'}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     {getStatutBadge(candidature.evaluation?.statut || 'soumis')}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {new Date(candidature.created_at).toLocaleDateString('fr-FR')}
+                    {formatDate(candidature.created_at)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
                     <button
