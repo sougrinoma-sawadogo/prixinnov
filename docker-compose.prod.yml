@@ -53,7 +53,7 @@ services:
     networks:
       - prixddi_network
     command: >
-      sh -c "
+      /bin/sh -c "
         echo 'Waiting for database...' &&
         sleep 5 &&
         npm run db:migrate &&
