@@ -62,14 +62,18 @@ fi
 
 # Stop existing containers
 echo -e "${YELLOW}🛑 Stopping existing containers...${NC}"
-docker-compose -f docker-compose.prod.yml down || true
+docker-compose -f docker-compose.prod.yml --env-file .env.prod down || true
+
+# Clean up any orphaned containers/volumes if needed
+echo -e "${YELLOW}🧹 Cleaning up orphaned containers...${NC}"
+docker-compose -f docker-compose.prod.yml --env-file .env.prod down -v 2>/dev/null || true
 
 # Build and start services
 echo -e "${YELLOW}🔨 Building Docker images...${NC}"
-docker-compose -f docker-compose.prod.yml build --no-cache
+docker-compose -f docker-compose.prod.yml --env-file .env.prod build --no-cache
 
 echo -e "${YELLOW}🚀 Starting services...${NC}"
-docker-compose -f docker-compose.prod.yml up -d
+docker-compose -f docker-compose.prod.yml --env-file .env.prod up -d
 
 # Wait for services to be healthy
 echo -e "${YELLOW}⏳ Waiting for services to be ready...${NC}"
@@ -99,11 +103,11 @@ fi
 
 # Show running containers
 echo -e "${GREEN}📦 Running containers:${NC}"
-docker-compose -f docker-compose.prod.yml ps
+docker-compose -f docker-compose.prod.yml --env-file .env.prod ps
 
 # Show logs
 echo -e "${GREEN}📋 Recent logs:${NC}"
-docker-compose -f docker-compose.prod.yml logs --tail=50
+docker-compose -f docker-compose.prod.yml --env-file .env.prod logs --tail=50
 
 echo ""
 echo -e "${GREEN}✅ Deployment completed successfully!${NC}"
@@ -112,9 +116,9 @@ echo "🌐 Application is available at:"
 echo "   - https://prinnov.benit.biz"
 echo ""
 echo "📊 To view logs:"
-echo "   docker-compose -f docker-compose.prod.yml logs -f"
+echo "   docker-compose -f docker-compose.prod.yml --env-file .env.prod logs -f"
 echo ""
 echo "🛑 To stop services:"
-echo "   docker-compose -f docker-compose.prod.yml down"
+echo "   docker-compose -f docker-compose.prod.yml --env-file .env.prod down"
 echo ""
 

@@ -2,6 +2,8 @@ version: '3.8'
 
 services:
   postgres:
+    env_file:
+      - .env.prod
     image: postgres:15-alpine
     container_name: prixddi_postgres_prod
     environment:
@@ -24,6 +26,8 @@ services:
       context: ./backend
       dockerfile: Dockerfile.prod
     container_name: prixddi_backend_prod
+    env_file:
+      - .env.prod
     environment:
       NODE_ENV: production
       PORT: 3000
