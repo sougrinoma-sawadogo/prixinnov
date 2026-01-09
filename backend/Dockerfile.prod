@@ -34,8 +34,16 @@ RUN addgroup -g 1001 -S nodejs && \
     adduser -S nodejs -u 1001
 
 # Install gosu manually (not available in Alpine repos)
+# Detect architecture and download appropriate binary
 RUN apk add --no-cache curl && \
-    curl -o /usr/local/bin/gosu -sSL "https://github.com/tianon/gosu/releases/download/1.17/gosu-amd64" && \
+    ARCH=$(uname -m) && \
+    case "$ARCH" in \
+        x86_64) GOSU_ARCH="amd64" ;; \
+        aarch64|arm64) GOSU_ARCH="arm64" ;; \
+        armv7l|armhf) GOSU_ARCH="armhf" ;; \
+        *) echo "Unsupported architecture: $ARCH" && exit 1 ;; \
+    esac && \
+    curl -o /usr/local/bin/gosu -sSL "https://github.com/tianon/gosu/releases/download/1.17/gosu-${GOSU_ARCH}" && \
     chmod +x /usr/local/bin/gosu && \
     apk del curl
 
