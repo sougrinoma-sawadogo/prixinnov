@@ -33,7 +33,7 @@ const EsintaxLayout = ({ children }) => {
       </div>
 
       {/* Bottom Navigation Bar */}
-      <div className="relative z-10 bg-gray-800 text-white py-2 px-4">
+      <div className="relative z-10 bg-gray-800 text-white py-2 px-4" style={{ display: 'none' }}>
         <div className="container mx-auto flex items-center justify-end space-x-6 text-sm">
           <a href="#" className="flex items-center space-x-2 hover:text-yellow-400 transition-colors">
             <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">

@@ -40,7 +40,7 @@ const HomePage = () => {
           <div className="mt-16 mb-20">
             <div className="bg-white bg-opacity-95 backdrop-blur-sm rounded-lg shadow-lg p-8 max-w-4xl mx-auto">
               <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-                À propos du PRIXINNOV/MEF 2026
+                À propos du PRINNOV/MEF 2026
               </h3>
               <div className="prose prose-lg mx-auto text-gray-700 leading-relaxed">
                 <p className="text-justify mb-4">

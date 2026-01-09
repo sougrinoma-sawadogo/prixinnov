@@ -18,6 +18,13 @@ const CandidatureDetailPage = () => {
       const response = await candidatureService.getById(id);
       if (response.success) {
         setCandidature(response.data);
+        // Log pour déboguer le logo
+        console.log('=== LOGS CANDIDATURE ===');
+        console.log('Candidature ID:', response.data.id);
+        console.log('Structure:', response.data.structure);
+        console.log('Logo path:', response.data.structure?.logo_path);
+        console.log('Structure complète:', JSON.stringify(response.data.structure, null, 2));
+        console.log('========================');
       }
     } catch (error) {
       console.error('Error fetching candidature:', error);

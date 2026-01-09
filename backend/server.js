@@ -33,35 +33,27 @@ import { errorHandler } from './middleware/errorHandler.js';
 import { verifyEmailConfig } from './services/emailService.js';
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 
 // CORS Configuration
 const corsOptions = {
   origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps, curl, Postman, etc.)
-    if (!origin) {
-      return callback(null, true);
+    // In development, allow all localhost origins
+    if (process.env.NODE_ENV === 'development' || !process.env.NODE_ENV) {
+      // Allow requests with no origin (like mobile apps, curl, Postman, etc.)
+      if (!origin) {
+        return callback(null, true);
+      }
+      // Allow all localhost and 127.0.0.1 origins with any port
+      if (origin.match(/^https?:\/\/(localhost|127\.0\.0\.1|0\.0\.0\.0)(:\d+)?$/)) {
+        return callback(null, true);
+      }
     }
     
     // Get allowed origins from environment or use defaults
     const allowedOrigins = process.env.FRONTEND_URL 
       ? process.env.FRONTEND_URL.split(',').map(url => url.trim())
       : ['http://localhost:5173', 'http://127.0.0.1:5173'];
-    
-    // In development, be more permissive
-    if (process.env.NODE_ENV === 'development' || !process.env.NODE_ENV) {
-      // Allow all localhost and 127.0.0.1 origins with any port
-      if (origin.match(/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/)) {
-        return callback(null, true);
-      }
-      // Also allow any origin in the allowed list
-      if (allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      }
-      // Log for debugging
-      console.log(`⚠️  CORS: Request from origin: ${origin}`);
-      console.log(`   Allowed origins: ${allowedOrigins.join(', ')}`);
-    }
     
     // Check if origin is in allowed list
     if (allowedOrigins.includes(origin)) {

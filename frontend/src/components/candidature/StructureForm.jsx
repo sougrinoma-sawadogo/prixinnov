@@ -1,10 +1,16 @@
 import { Controller } from 'react-hook-form';
 import { useDropzone } from 'react-dropzone';
 
-const StructureForm = ({ control, structure, setStructure }) => {
+const StructureForm = ({ control, structure, setStructure, setValue }) => {
   const onDrop = (acceptedFiles) => {
     if (acceptedFiles.length > 0) {
-      // Handle file upload
+      const file = acceptedFiles[0];
+      console.log('Logo sélectionné:', file.name, 'Taille:', file.size, 'Type:', file.type);
+      // Enregistrer le fichier dans le formulaire
+      if (setValue) {
+        setValue('logo', file);
+        console.log('Logo enregistré dans le formulaire');
+      }
     }
   };
 

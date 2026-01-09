@@ -42,11 +42,23 @@ const CandidatureFormPage = () => {
           type_structure: data.type_structure,
         };
 
+        console.log('=== CRÉATION STRUCTURE ===');
+        console.log('Structure data:', structureData);
+        console.log('Logo file:', data.logo ? {
+          name: data.logo.name,
+          size: data.logo.size,
+          type: data.logo.type
+        } : 'Aucun logo');
+        console.log('==========================');
+
         const structureResult = await structureService.create(
           structureData,
           data.logo
         );
         structureId = structureResult.data.id;
+        
+        console.log('Structure créée avec ID:', structureId);
+        console.log('Structure result:', structureResult);
       }
 
       // Prepare candidature data
@@ -160,6 +172,7 @@ const CandidatureFormPage = () => {
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           {step === 1 && (
             <StructureForm
+              setValue={setValue}
               control={control}
               structure={structure}
               setStructure={setStructure}

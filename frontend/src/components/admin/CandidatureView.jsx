@@ -1,24 +1,42 @@
 import { useState } from 'react';
 import api from '../../services/api';
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
 const CandidatureView = ({ candidature }) => {
   const [downloading, setDownloading] = useState(false);
 
   const handleDownloadPDF = async () => {
     setDownloading(true);
     try {
-      const response = await api.get(`/pdf/candidatures/${candidature.id}`, {
-        responseType: 'blob',
-      });
+      // Try template route first, fallback to classic route
+      let response;
+      try {
+        response = await api.get(`/pdf/candidatures/${candidature.id}/template`, {
+          responseType: 'blob',
+        });
+      } catch (templateError) {
+        // If template route fails, use classic route
+        console.warn('Template route failed, using classic PDF generation:', templateError);
+        response = await api.get(`/pdf/candidatures/${candidature.id}`, {
+          responseType: 'blob',
+        });
+      }
+      
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', `candidature-${candidature.id}.pdf`);
+      // Determine file extension from content type
+      const contentType = response.headers['content-type'] || '';
+      const extension = contentType.includes('wordprocessingml') ? '.docx' : '.pdf';
+      link.setAttribute('download', `candidature-${candidature.id}${extension}`);
       document.body.appendChild(link);
       link.click();
       link.remove();
+      window.URL.revokeObjectURL(url);
     } catch (error) {
       console.error('Error downloading PDF:', error);
+      alert('Erreur lors du téléchargement du PDF');
     } finally {
       setDownloading(false);
     }
@@ -38,6 +56,36 @@ const CandidatureView = ({ candidature }) => {
       </div>
       <div>
         <h3 className="text-xl font-semibold mb-4">Informations de la structure</h3>
+        
+        {/* Affichage du logo si disponible */}
+        {candidature.structure?.logo_path && (
+          <div className="mb-4">
+            <p className="text-sm text-gray-500 mb-2">Logo de la structure</p>
+            <div className="inline-block">
+              <img
+                src={`${API_BASE_URL}${candidature.structure.logo_path}`}
+                alt="Logo de la structure"
+                className="max-w-[200px] max-h-[200px] object-contain border border-gray-300 rounded shadow-sm"
+                onError={(e) => {
+                  console.error('Erreur chargement logo:', candidature.structure.logo_path);
+                  e.target.style.display = 'none';
+                }}
+                onLoad={() => {
+                  console.log('Logo chargé avec succès:', candidature.structure.logo_path);
+                }}
+              />
+            </div>
+          </div>
+        )}
+        
+        {!candidature.structure?.logo_path && (
+          <div className="mb-4 p-4 bg-yellow-50 rounded-lg border border-yellow-200">
+            <p className="text-sm text-yellow-800">
+              ⚠️ Aucun logo n'est associé à cette structure
+            </p>
+          </div>
+        )}
+
         <div className="grid grid-cols-2 gap-4">
           <div>
             <p className="text-sm text-gray-500">Dénomination</p>
