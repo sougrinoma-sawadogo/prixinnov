@@ -9,7 +9,7 @@ const CreativiteForm = ({ control, watch, setValue }) => {
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          Présentation brève *
+          1. Presentation brieve (présentez brièvement l’innovation une action novatrice ou réalisations exceptionnelles de « Souveraineté et Résilience Economique ») *
         </label>
         <Controller
           name="presentation_breve"
@@ -28,7 +28,7 @@ const CreativiteForm = ({ control, watch, setValue }) => {
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          Date du projet *
+          2. Date du projet (De quand date cette action ?)*
         </label>
         <Controller
           name="date_projet"
@@ -44,9 +44,10 @@ const CreativiteForm = ({ control, watch, setValue }) => {
         />
       </div>
 
+      3. Dites en quoi votre projet est innovant ?
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          Diagnostic du problème *
+          - Diagnostic du problème *
         </label>
         <Controller
           name="diagnostic"
@@ -62,10 +63,9 @@ const CreativiteForm = ({ control, watch, setValue }) => {
           )}
         />
       </div>
-
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          Cible impactée *
+          - Cible impactée *
         </label>
         <Controller
           name="cible"
@@ -84,7 +84,7 @@ const CreativiteForm = ({ control, watch, setValue }) => {
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          Particularité de l'innovation *
+          - Particularité de l'innovation *
         </label>
         <Controller
           name="particularite"
@@ -103,7 +103,7 @@ const CreativiteForm = ({ control, watch, setValue }) => {
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          Adéquation avec les objectifs du secteur *
+          - Adéquation avec les objectifs du secteur (les documents de planification du secteur) *
         </label>
         <Controller
           name="adequation_secteur"
