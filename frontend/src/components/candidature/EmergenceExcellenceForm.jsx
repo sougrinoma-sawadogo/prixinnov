@@ -10,7 +10,7 @@ const EmergenceExcellenceForm = ({ control, watch, setValue, categorie }) => {
       </h2>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-l font-semibold text-gray-700 mb-1">
           1. Présentation brève (présentez brièvement l'innovation) *
         </label>
         <Controller
@@ -30,7 +30,7 @@ const EmergenceExcellenceForm = ({ control, watch, setValue, categorie }) => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-l font-semibold text-gray-700 mb-1">
             2. Date du projet (De quand date cette action ?) *
           </label>
           <Controller
@@ -66,8 +66,11 @@ const EmergenceExcellenceForm = ({ control, watch, setValue, categorie }) => {
         </div>
       </div>
 
-      3. Dites en quoi votre projet est innovant ?
       <div>
+        <label className="block text-l font-semibold text-gray-700 mb-1">
+          3. Dites en quoi votre projet est innovant ?
+        </label>
+        <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
           - Diagnostic du problème *
         </label>
@@ -141,6 +144,7 @@ const EmergenceExcellenceForm = ({ control, watch, setValue, categorie }) => {
             />
           )}
         />
+        </div>
       </div>
 
       <ObjectifsTable control={control} watch={watch} setValue={setValue} showResultats={true} />

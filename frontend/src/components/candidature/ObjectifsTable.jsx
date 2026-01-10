@@ -22,7 +22,7 @@ const ObjectifsTable = ({ control, watch, setValue, showResultats }) => {
   return (
     <div className="space-y-6 border-t pt-6">
       <div className="flex justify-between items-center mb-4">
-        <label className="block text-sm font-medium text-gray-700">
+        <label className="block text-l font-semibold text-gray-700">
           4. Objectifs visés
         </label>
         <button

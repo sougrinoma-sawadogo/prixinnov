@@ -4,7 +4,7 @@ const PerspectivesForm = ({ control }) => {
   return (
     <div className="space-y-6 border-t pt-6">
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-l font-semibold text-gray-700 mb-1">
           5. Perspectives pour les 3 prochaines années *
         </label>
         <Controller
