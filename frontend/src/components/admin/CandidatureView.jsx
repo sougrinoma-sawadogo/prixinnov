@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import api from '../../services/api';
+import HtmlContent from '../common/HtmlContent';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
@@ -121,23 +122,33 @@ const CandidatureView = ({ candidature }) => {
           )}
           <div>
             <p className="text-sm text-gray-500">Présentation brève</p>
-            <p className="mt-1">{candidature.presentation_breve}</p>
+            <div className="mt-1 prose prose-sm max-w-none">
+              <HtmlContent content={candidature.presentation_breve} />
+            </div>
           </div>
           <div>
             <p className="text-sm text-gray-500">Diagnostic</p>
-            <p className="mt-1">{candidature.diagnostic}</p>
+            <div className="mt-1 prose prose-sm max-w-none">
+              <HtmlContent content={candidature.diagnostic} />
+            </div>
           </div>
           <div>
             <p className="text-sm text-gray-500">Cible</p>
-            <p className="mt-1">{candidature.cible}</p>
+            <div className="mt-1 prose prose-sm max-w-none">
+              <HtmlContent content={candidature.cible} />
+            </div>
           </div>
           <div>
             <p className="text-sm text-gray-500">Particularité</p>
-            <p className="mt-1">{candidature.particularite}</p>
+            <div className="mt-1 prose prose-sm max-w-none">
+              <HtmlContent content={candidature.particularite} />
+            </div>
           </div>
           <div>
             <p className="text-sm text-gray-500">Adéquation secteur</p>
-            <p className="mt-1">{candidature.adequation_secteur}</p>
+            <div className="mt-1 prose prose-sm max-w-none">
+              <HtmlContent content={candidature.adequation_secteur} />
+            </div>
           </div>
         </div>
       </div>
@@ -176,11 +187,15 @@ const CandidatureView = ({ candidature }) => {
           <div className="space-y-4">
             <div>
               <p className="text-sm text-gray-500">Objectifs</p>
-              <p className="mt-1">{candidature.perspectives.objectifs_3_ans}</p>
+              <div className="mt-1 prose prose-sm max-w-none">
+                <HtmlContent content={candidature.perspectives.objectifs_3_ans} />
+              </div>
             </div>
             <div>
               <p className="text-sm text-gray-500">Besoins</p>
-              <p className="mt-1">{candidature.perspectives.besoins_3_ans}</p>
+              <div className="mt-1 prose prose-sm max-w-none">
+                <HtmlContent content={candidature.perspectives.besoins_3_ans} />
+              </div>
             </div>
           </div>
         </div>

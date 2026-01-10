@@ -178,7 +178,9 @@ const CandidatureStatusPage = () => {
                 {candidature.presentation_breve && (
                   <div>
                     <p className="text-sm text-gray-500">Présentation brève</p>
-                    <p className="font-medium text-gray-900">{candidature.presentation_breve}</p>
+                    <div className="font-medium text-gray-900 prose prose-sm max-w-none">
+                      <HtmlContent content={candidature.presentation_breve} />
+                    </div>
                   </div>
                 )}
               </div>
