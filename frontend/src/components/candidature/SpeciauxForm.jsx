@@ -1,13 +1,26 @@
 import { Controller } from 'react-hook-form';
 
 const SpeciauxForm = ({ control, watch, setValue }) => {
+  const sousCategorie = watch('sous_categorie_special');
+
+  // Déterminer le label dynamique selon la sous-catégorie
+  const getPresentationLabel = () => {
+    if (sousCategorie === 'Souveraineté et Résilience Économique') {
+      return "1. Présentez brièvement l'innovation une action novatrice ou réalisations exceptionnelles de « Souveraineté et Résilience Economique » *";
+    } else if (sousCategorie === 'Engagement citoyen au MEF') {
+      return "1. Présentez brièvement l'innovation une action novatrice ou réalisations exceptionnelles de « Meilleur engagement citoyen au MEF » *";
+    } else {
+      return "1. Présentation brève (présentez brièvement l'action novatrice ou réalisation exceptionnelle) *";
+    }
+  };
+
   return (
     <div className="space-y-6">
       <h2 className="text-2xl font-semibold mb-4">Détails - Prix Spéciaux</h2>
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          1. Sous-catégorie *
+          Sous-catégorie *
         </label>
         <Controller
           name="sous_categorie_special"
@@ -32,7 +45,7 @@ const SpeciauxForm = ({ control, watch, setValue }) => {
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          2. Présentation brève (présentez brièvement l'action novatrice ou réalisation exceptionnelle) *
+          {getPresentationLabel()}
         </label>
         <Controller
           name="presentation_breve"
@@ -51,7 +64,7 @@ const SpeciauxForm = ({ control, watch, setValue }) => {
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          3. Date du projet (De quand date cette action ?) *
+          2. Date du projet (De quand date cette action ?) *
         </label>
         <Controller
           name="date_projet"
@@ -67,7 +80,7 @@ const SpeciauxForm = ({ control, watch, setValue }) => {
         />
       </div>
 
-      4. Dites en quoi votre action ou réalisation est exceptionnelle ?
+      3. Dites en quoi votre action ou réalisation est exceptionnelle ?
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
           - Diagnostic / Contexte *
