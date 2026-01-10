@@ -179,10 +179,12 @@ const StructureForm = ({ control, structure, setStructure, setValue }) => {
               >
                 <option value="">Sélectionner...</option>
                 <option value="Structure de mission">Structure de mission</option>
+                <option value="Structure transversale rattachée au cabinet du Ministre">Structure transversale rattachée au cabinet du Ministre</option>
                 <option value="Direction générale">Direction générale</option>
+                <option value="Structure transversale rattachée au Secrétariat général">Structure transversale rattachée au Secrétariat général</option>
                 <option value="Structure rattachée">Structure rattachée</option>
-                <option value="Projet/Programme de développement">Projet/Programme de développement</option>
-                <option value="Autre">Autre</option>
+                <option value="Projet ou programme de développement sous tutelle technique du MEF">Projet ou programme de développement sous tutelle technique du MEF</option>
+                <option value="Autres">Autres</option>
               </select>
             )}
           />

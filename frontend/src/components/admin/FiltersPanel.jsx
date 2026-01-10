@@ -60,13 +60,20 @@ const FiltersPanel = ({ filters, onFilterChange }) => {
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Type de structure
           </label>
-          <input
-            type="text"
+          <select
             value={filters.type_structure}
             onChange={(e) => handleChange('type_structure', e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
-            placeholder="Filtrer par type..."
-          />
+          >
+            <option value="">Tous</option>
+            <option value="Structure de mission">Structure de mission</option>
+            <option value="Structure transversale rattachée au cabinet du Ministre">Structure transversale rattachée au cabinet du Ministre</option>
+            <option value="Direction générale">Direction générale</option>
+            <option value="Structure transversale rattachée au Secrétariat général">Structure transversale rattachée au Secrétariat général</option>
+            <option value="Structure rattachée">Structure rattachée</option>
+            <option value="Projet ou programme de développement sous tutelle technique du MEF">Projet ou programme de développement sous tutelle technique du MEF</option>
+            <option value="Autres">Autres</option>
+          </select>
         </div>
       </div>
     </div>

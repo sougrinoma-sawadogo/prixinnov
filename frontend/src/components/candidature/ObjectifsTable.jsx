@@ -20,9 +20,11 @@ const ObjectifsTable = ({ control, watch, setValue, showResultats }) => {
   };
 
   return (
-    <div>
+    <div className="space-y-6 border-t pt-6">
       <div className="flex justify-between items-center mb-4">
-        <h3 className="text-lg font-semibold">Objectifs visés</h3>
+        <label className="block text-sm font-medium text-gray-700">
+          4. Objectifs visés
+        </label>
         <button
           type="button"
           onClick={addObjectif}
@@ -41,11 +43,11 @@ const ObjectifsTable = ({ control, watch, setValue, showResultats }) => {
               <tr>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">#</th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                  Libellé de l'objectif *
+                  - Libellé de l'objectif *
                 </th>
                 {showResultats && (
                   <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                    Résultat atteint *
+                    - Résultat atteint *
                   </th>
                 )}
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Action</th>

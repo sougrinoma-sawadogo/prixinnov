@@ -7,7 +7,7 @@ const SpeciauxForm = ({ control, watch, setValue }) => {
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          Sous-catégorie *
+          1. Sous-catégorie *
         </label>
         <Controller
           name="sous_categorie_special"
@@ -32,7 +32,7 @@ const SpeciauxForm = ({ control, watch, setValue }) => {
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          Présentation brève *
+          2. Présentation brève (présentez brièvement l'action novatrice ou réalisation exceptionnelle) *
         </label>
         <Controller
           name="presentation_breve"
@@ -51,7 +51,7 @@ const SpeciauxForm = ({ control, watch, setValue }) => {
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          Date du projet *
+          3. Date du projet (De quand date cette action ?) *
         </label>
         <Controller
           name="date_projet"
@@ -67,9 +67,10 @@ const SpeciauxForm = ({ control, watch, setValue }) => {
         />
       </div>
 
+      4. Dites en quoi votre action ou réalisation est exceptionnelle ?
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          Diagnostic / Contexte *
+          - Diagnostic / Contexte *
         </label>
         <Controller
           name="diagnostic"
@@ -88,7 +89,7 @@ const SpeciauxForm = ({ control, watch, setValue }) => {
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          Cible impactée *
+          - Cible impactée *
         </label>
         <Controller
           name="cible"
@@ -107,7 +108,7 @@ const SpeciauxForm = ({ control, watch, setValue }) => {
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          Particularité / Innovation *
+          - Particularité / Innovation *
         </label>
         <Controller
           name="particularite"
@@ -126,7 +127,7 @@ const SpeciauxForm = ({ control, watch, setValue }) => {
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          Adéquation avec les objectifs du secteur *
+          - Adéquation avec les objectifs du secteur (les documents de planification du secteur) *
         </label>
         <Controller
           name="adequation_secteur"

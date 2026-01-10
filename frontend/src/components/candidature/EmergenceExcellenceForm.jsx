@@ -11,7 +11,7 @@ const EmergenceExcellenceForm = ({ control, watch, setValue, categorie }) => {
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          Présentation brève *
+          1. Présentation brève (présentez brièvement l'innovation) *
         </label>
         <Controller
           name="presentation_breve"
@@ -31,7 +31,7 @@ const EmergenceExcellenceForm = ({ control, watch, setValue, categorie }) => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Date du projet *
+            2. Date du projet (De quand date cette action ?) *
           </label>
           <Controller
             name="date_projet"
@@ -49,7 +49,7 @@ const EmergenceExcellenceForm = ({ control, watch, setValue, categorie }) => {
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Date de mise en œuvre *
+            - Date de mise en œuvre *
           </label>
           <Controller
             name="date_mise_en_oeuvre"
@@ -66,9 +66,10 @@ const EmergenceExcellenceForm = ({ control, watch, setValue, categorie }) => {
         </div>
       </div>
 
+      3. Dites en quoi votre projet est innovant ?
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          Diagnostic du problème *
+          - Diagnostic du problème *
         </label>
         <Controller
           name="diagnostic"
@@ -87,7 +88,7 @@ const EmergenceExcellenceForm = ({ control, watch, setValue, categorie }) => {
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          Cible impactée *
+          - Cible impactée *
         </label>
         <Controller
           name="cible"
@@ -106,7 +107,7 @@ const EmergenceExcellenceForm = ({ control, watch, setValue, categorie }) => {
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          Particularité de l'innovation *
+          - Particularité de l'innovation *
         </label>
         <Controller
           name="particularite"
@@ -125,7 +126,7 @@ const EmergenceExcellenceForm = ({ control, watch, setValue, categorie }) => {
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          Adéquation avec les objectifs du secteur *
+          - Adéquation avec les objectifs du secteur (les documents de planification du secteur) *
         </label>
         <Controller
           name="adequation_secteur"
