@@ -44,7 +44,7 @@ const SpeciauxForm = ({ control, watch, setValue }) => {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-xl font-semibold text-gray-700 mb-1">
           {getPresentationLabel()}
         </label>
         <Controller
@@ -63,7 +63,7 @@ const SpeciauxForm = ({ control, watch, setValue }) => {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-xl font-semibold text-gray-700 mb-1">
           2. Date du projet (De quand date cette action ?) *
         </label>
         <Controller
@@ -80,11 +80,14 @@ const SpeciauxForm = ({ control, watch, setValue }) => {
         />
       </div>
 
-      3. Dites en quoi votre action ou réalisation est exceptionnelle ?
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          - Diagnostic / Contexte *
+        <label className="block text-xl font-semibold text-gray-700 mb-1">
+          3. Dites en quoi votre action ou réalisation est exceptionnelle ?
         </label>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            - Diagnostic / Contexte *
+          </label>
         <Controller
           name="diagnostic"
           control={control}
@@ -155,6 +158,7 @@ const SpeciauxForm = ({ control, watch, setValue }) => {
             />
           )}
         />
+        </div>
       </div>
     </div>
   );
