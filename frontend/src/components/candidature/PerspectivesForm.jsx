@@ -1,4 +1,5 @@
 import { Controller } from 'react-hook-form';
+import RichTextEditor from './RichTextEditor';
 
 const PerspectivesForm = ({ control }) => {
   return (
@@ -12,10 +13,9 @@ const PerspectivesForm = ({ control }) => {
           control={control}
           rules={{ required: 'Objectifs 3 ans requis' }}
           render={({ field }) => (
-            <textarea
-              {...field}
-              rows={5}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
+            <RichTextEditor
+              value={field.value}
+              onChange={field.onChange}
               placeholder="En perspectives, pour les 3 prochaines années indiquer quels sont les objectifs visés et les besoins pour atteindre ces objectifs ?"
             />
           )}
@@ -31,10 +31,9 @@ const PerspectivesForm = ({ control }) => {
           control={control}
           rules={{ required: 'Besoins 3 ans requis' }}
           render={({ field }) => (
-            <textarea
-              {...field}
-              rows={5}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
+            <RichTextEditor
+              value={field.value}
+              onChange={field.onChange}
               placeholder="Décrivez les moyens nécessaires (humains, financiers, techniques)"
             />
           )}

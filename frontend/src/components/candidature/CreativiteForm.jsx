@@ -1,6 +1,7 @@
 import { Controller } from 'react-hook-form';
 import ObjectifsTable from './ObjectifsTable';
 import PerspectivesForm from './PerspectivesForm';
+import RichTextEditor from './RichTextEditor';
 
 const CreativiteForm = ({ control, watch, setValue }) => {
   return (
@@ -16,10 +17,9 @@ const CreativiteForm = ({ control, watch, setValue }) => {
           control={control}
           rules={{ required: 'Présentation brève requise' }}
           render={({ field }) => (
-            <textarea
-              {...field}
-              rows={4}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
+            <RichTextEditor
+              value={field.value}
+              onChange={field.onChange}
               placeholder="Décrivez brièvement votre innovation"
             />
           )}
@@ -43,8 +43,10 @@ const CreativiteForm = ({ control, watch, setValue }) => {
           )}
         />
       </div>
-
-      3. Dites en quoi votre projet est innovant ?
+        <br />
+<label className="block text-l font-semibold text-gray-700 mb-1">
+  3. Dites en quoi votre projet est innovant ?
+  </label>
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
           - Diagnostic du problème *
@@ -54,10 +56,9 @@ const CreativiteForm = ({ control, watch, setValue }) => {
           control={control}
           rules={{ required: 'Diagnostic requis' }}
           render={({ field }) => (
-            <textarea
-              {...field}
-              rows={5}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
+            <RichTextEditor
+              value={field.value}
+              onChange={field.onChange}
               placeholder="Décrivez le problème que votre innovation résout"
             />
           )}
@@ -72,10 +73,9 @@ const CreativiteForm = ({ control, watch, setValue }) => {
           control={control}
           rules={{ required: 'Cible requise' }}
           render={({ field }) => (
-            <textarea
-              {...field}
-              rows={3}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
+            <RichTextEditor
+              value={field.value}
+              onChange={field.onChange}
               placeholder="Quels sont les acteurs impactés par cette innovation ?"
             />
           )}
@@ -91,10 +91,9 @@ const CreativiteForm = ({ control, watch, setValue }) => {
           control={control}
           rules={{ required: 'Particularité requise' }}
           render={({ field }) => (
-            <textarea
-              {...field}
-              rows={5}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
+            <RichTextEditor
+              value={field.value}
+              onChange={field.onChange}
               placeholder="Qu'est-ce qui rend ce projet innovant ?"
             />
           )}
@@ -110,10 +109,9 @@ const CreativiteForm = ({ control, watch, setValue }) => {
           control={control}
           rules={{ required: 'Adéquation requise' }}
           render={({ field }) => (
-            <textarea
-              {...field}
-              rows={5}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
+            <RichTextEditor
+              value={field.value}
+              onChange={field.onChange}
               placeholder="Comment votre innovation s'aligne-t-elle avec les objectifs stratégiques du secteur ?"
             />
           )}
