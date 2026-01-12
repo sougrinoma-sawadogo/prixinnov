@@ -49,6 +49,18 @@ if netstat -tuln 2>/dev/null | grep -q ":$NGINX_HTTP_PORT "; then
     fi
 fi
 
+# Vérifier si la config nginx doit être mise à jour pour Apache
+if [ -f "nginx/conf.d/default.apache.conf" ] && ! grep -q "return 301" nginx/conf.d/default.conf 2>/dev/null; then
+    echo "📋 Configuration nginx déjà adaptée pour Apache"
+elif [ -f "nginx/conf.d/default.apache.conf" ]; then
+    echo "📋 Mise à jour de la configuration nginx pour Apache..."
+    if [ -f "nginx/conf.d/default.conf" ]; then
+        cp nginx/conf.d/default.conf nginx/conf.d/default.conf.backup
+    fi
+    cp nginx/conf.d/default.apache.conf nginx/conf.d/default.conf
+    echo "✅ Configuration nginx mise à jour (plus de redirection HTTP->HTTPS)"
+fi
+
 # Recréer nginx avec --force-recreate et --no-deps
 echo "📦 Recréation du conteneur nginx..."
 docker-compose -f docker-compose.prod.yml up -d --force-recreate --no-deps nginx
@@ -72,4 +84,8 @@ netstat -tuln | grep -E ":($NGINX_HTTP_PORT|$NGINX_HTTPS_PORT)" || echo "⚠️ 
 echo ""
 echo "✅ Nginx recréé. Testez avec: curl http://localhost:$NGINX_HTTP_PORT"
 echo "   Ports configurés: HTTP=$NGINX_HTTP_PORT, HTTPS=$NGINX_HTTPS_PORT"
+echo ""
+echo "📋 Note: Si vous voyez une redirection 301, mettez à jour la config nginx:"
+echo "   sudo ./apache/update-nginx-config.sh"
+echo "   Cela désactivera la redirection HTTP->HTTPS (Apache gère déjà le SSL)"
 

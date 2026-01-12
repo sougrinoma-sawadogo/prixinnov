@@ -85,6 +85,9 @@ services:
       - ./nginx/ssl:/etc/nginx/ssl:ro
       - frontend_dist:/usr/share/nginx/html:ro
       - ./nginx/logs:/var/log/nginx
+    # Use Apache-friendly config (no SSL redirect) when behind Apache
+    # To use this, rename default.apache.conf to default.conf in conf.d
+    # Or mount it directly: - ./nginx/conf.d/default.apache.conf:/etc/nginx/conf.d/default.conf:ro
     depends_on:
       - backend
       - frontend
