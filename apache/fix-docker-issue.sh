@@ -24,19 +24,29 @@ docker stop prixddi_nginx_prod 2>/dev/null || echo "Nginx déjà arrêté"
 docker rm prixddi_nginx_prod 2>/dev/null || echo "Conteneur nginx déjà supprimé"
 
 # Vérifier que les ports sont corrects dans docker-compose.prod.yml
-if grep -q '"80:80"' docker-compose.prod.yml; then
+if grep -q '"80:80"' docker-compose.prod.yml || grep -q '"443:443"' docker-compose.prod.yml; then
     echo "⚠️  ATTENTION: Les ports dans docker-compose.prod.yml sont encore 80/443"
-    echo "   Ils devraient être 8080/8443 pour Apache"
-    echo "   Vérifiez que le fichier a été mis à jour avec:"
-    echo "     ports:"
-    echo "       - \"127.0.0.1:8080:80\""
-    echo "       - \"127.0.0.1:8443:443\""
+    echo "   Ils devraient être configurés pour localhost (ex: 8081/8444)"
+    echo "   Vérifiez que le fichier a été mis à jour"
     echo ""
     read -p "Continuer quand même? (y/n) " -n 1 -r
     echo
     if [[ ! $REPLY =~ ^[Yy]$ ]]; then
         exit 1
     fi
+fi
+
+# Vérifier si les ports sont déjà utilisés
+NGINX_HTTP_PORT=$(grep -A 2 "ports:" docker-compose.prod.yml | grep -oP '127\.0\.0\.1:\K\d+(?=:80)' | head -1 || echo "8081")
+if netstat -tuln 2>/dev/null | grep -q ":$NGINX_HTTP_PORT "; then
+    echo "⚠️  Le port $NGINX_HTTP_PORT est déjà utilisé"
+    echo "   Processus utilisant le port:"
+    netstat -tuln | grep ":$NGINX_HTTP_PORT " || true
+    echo ""
+    echo "   Vous pouvez:"
+    echo "   1. Modifier docker-compose.prod.yml pour utiliser un autre port"
+    echo "   2. Arrêter le processus qui utilise le port"
+    echo ""
 fi
 
 # Redémarrer uniquement nginx avec docker-compose (sans dépendances)
@@ -54,13 +64,16 @@ if docker ps | grep -q prixddi_nginx_prod; then
     docker port prixddi_nginx_prod
     echo ""
     echo "📋 Ports en écoute sur le système:"
-    netstat -tuln | grep -E ':(8080|8443)' || echo "⚠️  Les ports 8080/8443 ne sont pas encore actifs"
+    NGINX_HTTP_PORT=$(docker port prixddi_nginx_prod 2>/dev/null | grep ":80" | cut -d: -f2 | cut -d- -f1 || echo "8081")
+    NGINX_HTTPS_PORT=$(docker port prixddi_nginx_prod 2>/dev/null | grep ":443" | cut -d: -f2 | cut -d- -f1 || echo "8444")
+    netstat -tuln | grep -E ":($NGINX_HTTP_PORT|$NGINX_HTTPS_PORT)" || echo "⚠️  Les ports $NGINX_HTTP_PORT/$NGINX_HTTPS_PORT ne sont pas encore actifs"
     
     # Vérifier que les bons ports sont utilisés
-    if docker port prixddi_nginx_prod | grep -q "8080\|8443"; then
-        echo "✅ Les ports 8080/8443 sont correctement configurés"
+    if docker port prixddi_nginx_prod 2>/dev/null | grep -q "127.0.0.1"; then
+        echo "✅ Les ports sont correctement configurés sur localhost"
+        docker port prixddi_nginx_prod
     else
-        echo "⚠️  ATTENTION: Le conteneur n'utilise pas les ports 8080/8443"
+        echo "⚠️  ATTENTION: Le conteneur n'utilise pas les ports localhost"
         echo "   Vérifiez que docker-compose.prod.yml a été mis à jour"
     fi
 else

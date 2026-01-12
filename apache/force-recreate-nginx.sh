@@ -17,12 +17,36 @@ docker rm prixddi_nginx_prod 2>/dev/null || echo "Conteneur déjà supprimé"
 
 # Vérifier la configuration
 echo "📋 Vérification de la configuration..."
-if ! grep -q "127.0.0.1:8080:80" docker-compose.prod.yml; then
+if ! grep -q "127.0.0.1:808" docker-compose.prod.yml; then
     echo "❌ ERREUR: Les ports dans docker-compose.prod.yml ne sont pas corrects"
-    echo "   Ils devraient être:"
-    echo "     - \"127.0.0.1:8080:80\""
-    echo "     - \"127.0.0.1:8443:443\""
+    echo "   Ils devraient être configurés (ex: 8081/8444)"
     exit 1
+fi
+
+# Vérifier si les ports sont déjà utilisés
+echo "🔍 Vérification des ports..."
+NGINX_HTTP_PORT=$(grep -A 2 "ports:" docker-compose.prod.yml | grep -oP '127\.0\.0\.1:\K\d+(?=:80)' | head -1)
+NGINX_HTTPS_PORT=$(grep -A 2 "ports:" docker-compose.prod.yml | grep -oP '127\.0\.0\.1:\K\d+(?=:443)' | head -1)
+
+if [ -z "$NGINX_HTTP_PORT" ] || [ -z "$NGINX_HTTPS_PORT" ]; then
+    echo "⚠️  Impossible de détecter les ports depuis docker-compose.prod.yml"
+    echo "   Utilisation des ports par défaut: 8081 et 8444"
+    NGINX_HTTP_PORT=8081
+    NGINX_HTTPS_PORT=8444
+fi
+
+if netstat -tuln 2>/dev/null | grep -q ":$NGINX_HTTP_PORT "; then
+    echo "⚠️  Le port $NGINX_HTTP_PORT est déjà utilisé:"
+    netstat -tuln | grep ":$NGINX_HTTP_PORT "
+    echo ""
+    echo "Options:"
+    echo "  1. Arrêter le processus qui utilise le port"
+    echo "  2. Modifier docker-compose.prod.yml pour utiliser un autre port"
+    read -p "Voulez-vous continuer quand même? (y/n) " -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        exit 1
+    fi
 fi
 
 # Recréer nginx avec --force-recreate et --no-deps
@@ -43,8 +67,9 @@ docker port prixddi_nginx_prod
 
 echo ""
 echo "📋 Ports en écoute:"
-netstat -tuln | grep -E ':(8080|8443)' || echo "⚠️  Ports 8080/8443 non trouvés"
+netstat -tuln | grep -E ":($NGINX_HTTP_PORT|$NGINX_HTTPS_PORT)" || echo "⚠️  Ports $NGINX_HTTP_PORT/$NGINX_HTTPS_PORT non trouvés"
 
 echo ""
-echo "✅ Nginx recréé. Testez avec: curl http://localhost:8080"
+echo "✅ Nginx recréé. Testez avec: curl http://localhost:$NGINX_HTTP_PORT"
+echo "   Ports configurés: HTTP=$NGINX_HTTP_PORT, HTTPS=$NGINX_HTTPS_PORT"
 

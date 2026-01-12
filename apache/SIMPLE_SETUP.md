@@ -14,13 +14,13 @@ Cette approche est la plus simple : on change les ports du conteneur nginx et on
 
 ### 1. Modifier docker-compose.prod.yml
 
-Changez les ports du service nginx :
+Changez les ports du service nginx (utilisez 8081/8444 si 8080 est déjà utilisé par OnlyOffice) :
 
 ```yaml
 nginx:
   ports:
-    - "127.0.0.1:8080:80"   # HTTP sur localhost:8080
-    - "127.0.0.1:8443:443"   # HTTPS sur localhost:8443
+    - "127.0.0.1:8081:80"   # HTTP sur localhost:8081 (8080 peut être utilisé par OnlyOffice)
+    - "127.0.0.1:8444:443"   # HTTPS sur localhost:8444
 ```
 
 ### 2. Redémarrer les conteneurs
@@ -38,11 +38,11 @@ docker-compose -f docker-compose.prod.yml up -d nginx
 ### 3. Vérifier que nginx écoute sur les nouveaux ports
 
 ```bash
-# Vérifier les ports
-sudo netstat -tulpn | grep -E ':(8080|8443)'
+# Vérifier les ports (remplacez 8081/8444 par vos ports si différents)
+sudo netstat -tulpn | grep -E ':(8081|8444)'
 
 # Tester nginx directement
-curl http://localhost:8080
+curl http://localhost:8081
 ```
 
 ### 4. Activer les modules Apache
