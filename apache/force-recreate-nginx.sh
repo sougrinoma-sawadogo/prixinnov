@@ -50,15 +50,18 @@ if netstat -tuln 2>/dev/null | grep -q ":$NGINX_HTTP_PORT "; then
 fi
 
 # Vérifier si la config nginx doit être mise à jour pour Apache
-if [ -f "nginx/conf.d/default.apache.conf" ] && ! grep -q "return 301" nginx/conf.d/default.conf 2>/dev/null; then
-    echo "📋 Configuration nginx déjà adaptée pour Apache"
-elif [ -f "nginx/conf.d/default.apache.conf" ]; then
-    echo "📋 Mise à jour de la configuration nginx pour Apache..."
-    if [ -f "nginx/conf.d/default.conf" ]; then
-        cp nginx/conf.d/default.conf nginx/conf.d/default.conf.backup
+if [ -f "nginx/conf.d/default.apache.conf" ]; then
+    if grep -q "return 301" nginx/conf.d/default.conf 2>/dev/null; then
+        echo "📋 Mise à jour de la configuration nginx pour Apache..."
+        if [ -f "nginx/conf.d/default.conf" ]; then
+            cp nginx/conf.d/default.conf nginx/conf.d/default.conf.backup
+            echo "✅ Ancienne config sauvegardée: nginx/conf.d/default.conf.backup"
+        fi
+        cp nginx/conf.d/default.apache.conf nginx/conf.d/default.conf
+        echo "✅ Configuration nginx mise à jour (plus de redirection HTTP->HTTPS)"
+    else
+        echo "📋 Configuration nginx déjà adaptée pour Apache"
     fi
-    cp nginx/conf.d/default.apache.conf nginx/conf.d/default.conf
-    echo "✅ Configuration nginx mise à jour (plus de redirection HTTP->HTTPS)"
 fi
 
 # Recréer nginx avec --force-recreate et --no-deps

@@ -95,3 +95,18 @@ echo ""
 echo "📋 État des conteneurs:"
 docker ps --filter "name=prixddi" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
 
+# Vérifier et corriger la redirection nginx si nécessaire
+if [ -f "nginx/conf.d/default.apache.conf" ] && docker ps | grep -q prixddi_nginx_prod; then
+    if grep -q "return 301" nginx/conf.d/default.conf 2>/dev/null; then
+        echo ""
+        echo "📋 Correction de la redirection nginx..."
+        if [ -f "nginx/conf.d/default.conf" ]; then
+            cp nginx/conf.d/default.conf nginx/conf.d/default.conf.backup
+        fi
+        cp nginx/conf.d/default.apache.conf nginx/conf.d/default.conf
+        docker restart prixddi_nginx_prod
+        sleep 2
+        echo "✅ Configuration nginx mise à jour (plus de redirection 301)"
+    fi
+fi
+
