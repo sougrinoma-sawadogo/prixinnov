@@ -2,10 +2,14 @@ import { useState } from 'react';
 import api from '../../services/api';
 import StatusSelector from './StatusSelector';
 import DecisionEditor from './DecisionEditor';
+import NoteEditor from './NoteEditor';
+import CommentEditor from './CommentEditor';
 
 const EvaluationPanel = ({ candidature, onUpdate }) => {
   const [statut, setStatut] = useState(candidature.evaluation?.statut || 'soumis');
   const [decision, setDecision] = useState(candidature.evaluation?.decision_finale || '');
+  const [note, setNote] = useState(candidature.evaluation?.note_finale !== null && candidature.evaluation?.note_finale !== undefined ? parseFloat(candidature.evaluation.note_finale) : null);
+  const [commentaire, setCommentaire] = useState(candidature.evaluation?.commentaire || '');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [showAdmissionConfirm, setShowAdmissionConfirm] = useState(false);
@@ -77,6 +81,8 @@ const EvaluationPanel = ({ candidature, onUpdate }) => {
       const response = await api.put(`/evaluations/${evaluationId}`, {
         decision_finale: decision,
         statut: statut,
+        note_finale: note,
+        commentaire: commentaire,
       });
 
       if (response.data.success) {
@@ -163,6 +169,18 @@ const EvaluationPanel = ({ candidature, onUpdate }) => {
       <StatusSelector
         currentStatut={statut}
         onStatutChange={handleUpdateStatut}
+        loading={loading}
+      />
+
+      <NoteEditor
+        note={note}
+        onNoteChange={setNote}
+        loading={loading}
+      />
+
+      <CommentEditor
+        commentaire={commentaire}
+        onCommentaireChange={setCommentaire}
         loading={loading}
       />
 

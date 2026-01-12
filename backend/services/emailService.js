@@ -250,9 +250,10 @@ export const sendAdmissionEmail = async (candidature, recipientEmail) => {
             .info-box { background-color: white; padding: 15px; margin: 15px 0; border-left: 4px solid #009639; }
             .button { display: inline-block; padding: 12px 24px; background-color: #009639; color: white; text-decoration: none; border-radius: 4px; margin: 10px 0; }
             .footer { text-align: center; padding: 20px; color: #6b7280; font-size: 12px; }
+            .mail-detail-content .button {display: inline-block; padding: 12px 24px; background-color: rgb(0, 150, 57); color: white; text-decoration: none; border-radius: 4px; margin: 10px 0px; }
           </style>
         </head>
-        <body>
+        <body class="mail-detail-content">
           <div class="container">
             <div class="header">
               <h1>🎉 Félicitations !</h1>

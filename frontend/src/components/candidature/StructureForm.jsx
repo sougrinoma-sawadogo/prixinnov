@@ -1,5 +1,6 @@
 import { Controller } from 'react-hook-form';
 import { useDropzone } from 'react-dropzone';
+import RichTextEditor from './RichTextEditor';
 
 const StructureForm = ({ control, structure, setStructure, setValue }) => {
   const onDrop = (acceptedFiles) => {
@@ -75,7 +76,7 @@ const StructureForm = ({ control, structure, setStructure, setValue }) => {
             render={({ field }) => (
               <textarea
                 {...field}
-                rows={3}
+                rows={1}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
                 placeholder="Adresse complète"
               />

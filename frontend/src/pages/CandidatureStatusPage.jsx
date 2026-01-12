@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import EsintaxLayout from '../layouts/EsintaxLayout';
 import { candidatureService } from '../services/candidatureService';
+import HtmlContent from '../components/common/HtmlContent';
 
 const CandidatureStatusPage = () => {
   const { id } = useParams();

@@ -122,9 +122,22 @@ export const updateEvaluation = async (req, res) => {
       });
     }
 
+    // Validate note_finale if provided
+    if (req.body.note_finale !== undefined) {
+      const note = parseFloat(req.body.note_finale);
+      if (isNaN(note) || note < 0 || note > 20) {
+        return res.status(400).json({
+          success: false,
+          message: 'La note doit être un nombre entre 0 et 20',
+        });
+      }
+    }
+
     const updateData = {
       statut: req.body.statut || evaluation.statut,
-      decision_finale: req.body.decision_finale || evaluation.decision_finale,
+      decision_finale: req.body.decision_finale !== undefined ? req.body.decision_finale : evaluation.decision_finale,
+      note_finale: req.body.note_finale !== undefined ? req.body.note_finale : evaluation.note_finale,
+      commentaire: req.body.commentaire !== undefined ? req.body.commentaire : evaluation.commentaire,
       evaluateur_id: req.user.id,
       date_evaluation: new Date(),
     };
