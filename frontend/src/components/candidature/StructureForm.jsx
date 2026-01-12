@@ -1,18 +1,47 @@
+import { useState } from 'react';
 import { Controller } from 'react-hook-form';
 import { useDropzone } from 'react-dropzone';
 import RichTextEditor from './RichTextEditor';
 
 const StructureForm = ({ control, structure, setStructure, setValue }) => {
+  const [selectedLogo, setSelectedLogo] = useState(null);
+  const [logoPreview, setLogoPreview] = useState(null);
+
   const onDrop = (acceptedFiles) => {
     if (acceptedFiles.length > 0) {
       const file = acceptedFiles[0];
       console.log('Logo sélectionné:', file.name, 'Taille:', file.size, 'Type:', file.type);
-      // Enregistrer le fichier dans le formulaire
+      
+      // Créer un aperçu du logo
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setLogoPreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+      
+      // Enregistrer le fichier dans le formulaire et l'état local
+      setSelectedLogo(file);
       if (setValue) {
         setValue('logo', file);
         console.log('Logo enregistré dans le formulaire');
       }
     }
+  };
+
+  const removeLogo = () => {
+    setSelectedLogo(null);
+    setLogoPreview(null);
+    if (setValue) {
+      setValue('logo', null);
+    }
+  };
+
+  const formatFileSize = (bytes) => {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
   };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -196,20 +225,71 @@ const StructureForm = ({ control, structure, setStructure, setValue }) => {
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Logo de la structure
         </label>
-        <div
-          {...getRootProps()}
-          className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer ${
-            isDragActive ? 'border-green-500 bg-green-50' : 'border-gray-300'
-          }`}
-        >
-          <input {...getInputProps()} name="logo" />
-          <p className="text-gray-600">
-            {isDragActive
-              ? 'Déposez le fichier ici...'
-              : 'Glissez-déposez le logo ici, ou cliquez pour sélectionner'}
-          </p>
-          <p className="text-sm text-gray-500 mt-2">PNG, JPG jusqu'à 5MB</p>
-        </div>
+        
+        {selectedLogo ? (
+          <div className="border-2 border-green-500 rounded-lg p-4 bg-green-50">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                {logoPreview && (
+                  <img
+                    src={logoPreview}
+                    alt="Aperçu du logo"
+                    className="w-16 h-16 object-contain rounded border border-gray-300 bg-white"
+                  />
+                )}
+                <div>
+                  <p className="text-sm font-medium text-gray-900">
+                    {selectedLogo.name}
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    {formatFileSize(selectedLogo.size)}
+                  </p>
+                  <p className="text-xs text-green-600 font-medium mt-1">
+                    ✓ Logo sélectionné
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={removeLogo}
+                className="px-3 py-1 text-sm text-red-600 hover:text-red-700 hover:bg-red-50 rounded transition-colors"
+              >
+                Supprimer
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div
+            {...getRootProps()}
+            className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${
+              isDragActive
+                ? 'border-green-500 bg-green-50'
+                : 'border-gray-300 hover:border-green-400 hover:bg-gray-50'
+            }`}
+          >
+            <input {...getInputProps()} name="logo" />
+            <svg
+              className="mx-auto h-12 w-12 text-gray-400 mb-2"
+              stroke="currentColor"
+              fill="none"
+              viewBox="0 0 48 48"
+              aria-hidden="true"
+            >
+              <path
+                d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
+                strokeWidth={2}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+            <p className="text-gray-600">
+              {isDragActive
+                ? 'Déposez le fichier ici...'
+                : 'Glissez-déposez le logo ici, ou cliquez pour sélectionner'}
+            </p>
+            <p className="text-sm text-gray-500 mt-2">PNG, JPG jusqu'à 5MB</p>
+          </div>
+        )}
       </div>
     </div>
   );
